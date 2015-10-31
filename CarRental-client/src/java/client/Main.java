@@ -24,6 +24,16 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         manager.loadData("Dockx");
         manager.loadData("Hertz");
         
+        System.out.println("Car types for Dockx: ");
+        for(CarType ct : manager.getCarTypes("Dockx")) {
+            System.out.println("\t" + ct.toString());
+        }
+        
+        System.out.println("Car types for Hertz: ");
+        for(CarType ct : manager.getCarTypes("Hertz")) {
+            System.out.println("\t" + ct.toString());
+        }
+        
         main.run();
     }
     
