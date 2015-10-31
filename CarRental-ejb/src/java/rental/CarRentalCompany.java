@@ -1,5 +1,6 @@
 package rental;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -22,9 +24,9 @@ public class CarRentalCompany {
     
     @Id
     private String name;
-    @OneToMany
-    private List<Car> cars;
-    @ManyToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Car> cars = new ArrayList<Car>();
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<CarType> carTypes = new HashSet<CarType>();
 
     /***************
@@ -36,9 +38,8 @@ public class CarRentalCompany {
     public CarRentalCompany(String name, List<Car> cars) {
         logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
         this.name = name;
-        this.cars = cars;
         for (Car car : cars) {
-            carTypes.add(car.getType());
+            addCar(car);
         }
     }
 
@@ -84,6 +85,11 @@ public class CarRentalCompany {
     /*********
      * CARS *
      *********/
+    
+    private void addCar(Car car) {
+        cars.add(car);
+        carTypes.add(car.getType());
+    }
     
     public Car getCar(int uid) {
         for (Car car : cars) {

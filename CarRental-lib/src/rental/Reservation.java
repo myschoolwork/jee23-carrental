@@ -9,7 +9,7 @@ import javax.persistence.Id;
 public class Reservation extends Quote {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     
     private int carId;

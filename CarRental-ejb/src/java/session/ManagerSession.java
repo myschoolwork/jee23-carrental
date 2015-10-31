@@ -10,6 +10,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import rental.Car;
+import rental.CarCompanyLoader;
 import rental.CarRentalCompany;
 import rental.CarType;
 import rental.Reservation;
@@ -23,18 +24,16 @@ public class ManagerSession implements ManagerSessionRemote {
     
     
     @Override
-    public void createCompany(String name) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createCarType(String name, int nbOfSeats, float trunkSpace, double rentalPricePerDay, boolean smokingAllowed) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void createCarFor(String comapny, String type) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void loadData(String name) {
+        CarRentalCompany company = CarCompanyLoader.loadRental(name, name.toLowerCase()+".csv");
+        if (company != null) {
+            em.merge(company);
+            // TO ASK: persist gives duplicate key error
+            // probably because boths companies use the same cartypes, but they are
+            // created separately. (So a cartype Compact is created for both hertz and dockx)
+            // merge just updates the previous instance of this cartype in the databse
+            // is this ok?
+        }
     }
     
     
