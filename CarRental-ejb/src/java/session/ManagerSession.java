@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
+import javax.persistence.TemporalType;
 import rental.CarCompanyLoader;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -66,5 +67,16 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
                 .setParameter("renter", renter)
                 .getSingleResult();
         return ((Long)result).intValue();
+    }
+
+    @Override
+    public String getMostPopularCarRentalCompany() {
+        List result = em.createQuery(
+                  "SELECT c.name "
+                + "FROM CarRentalCompany c, IN(c.cars) cr, IN(cr.reservations) r "
+                + "GROUP BY c.name "
+                + "ORDER BY COUNT(r) DESC")
+                .getResultList();
+        return (String)result.get(0);
     }
 }

@@ -42,6 +42,22 @@ public class CarRentalSession extends Session implements CarRentalSessionRemote 
                 .getResultList();
         return new LinkedList<CarType>(result);
     }
+    
+    @Override
+    public CarType getCheapestCarType(Date start, Date end) {
+        List result = em.createQuery(
+                  "SELECT DISTINCT c.type "
+                + "FROM Car c "
+                + "WHERE NOT EXISTS ("
+                    + "SELECT r FROM IN(c.reservations) r WHERE r.startDate BETWEEN :start AND :end OR r.endDate BETWEEN :start AND :end"
+                + ")"
+                + "ORDER BY c.type.rentalPricePerDay ASC")
+                .setParameter("start", start, TemporalType.DATE)
+                .setParameter("end", end, TemporalType.DATE)
+                .getResultList();
+        
+        return (CarType)result.get(0);
+    }    
 
     @Override
     public Quote createQuote(String companyName, ReservationConstraints constraints) throws ReservationException {

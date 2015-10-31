@@ -80,13 +80,11 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
 
     @Override
     protected String getCheapestCarType(CarRentalSessionRemote session, Date start, Date end) throws Exception {
-        System.err.println("To be implemented.");
-        return null;
+        return session.getCheapestCarType(start, end).getName();
     }
 
     @Override
     protected String getMostPopularCarRentalCompany(ManagerSessionRemote ms) throws Exception {
-        System.err.println("To be implemented.");
-        return null;
+        return ms.getMostPopularCarRentalCompany();
     }
 }
