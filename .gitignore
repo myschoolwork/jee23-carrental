@@ -1,0 +1,5 @@
+*.jar
+*.class
+CarRental/build/*
+CarRental-ejb/build/*
+CarRental-lib/build/*

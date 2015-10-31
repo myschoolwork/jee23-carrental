@@ -8,21 +8,34 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+@Entity
 public class CarRentalCompany {
-
+    
+    @Transient
     private static Logger logger = Logger.getLogger(CarRentalCompany.class.getName());
+    
+    @Id
     private String name;
+    @OneToMany
     private List<Car> cars;
+    @ManyToMany
     private Set<CarType> carTypes = new HashSet<CarType>();
 
     /***************
      * CONSTRUCTOR *
      ***************/
     
+    protected CarRentalCompany() { } //For entity
+    
     public CarRentalCompany(String name, List<Car> cars) {
         logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
-        setName(name);
+        this.name = name;
         this.cars = cars;
         for (Car car : cars) {
             carTypes.add(car.getType());
@@ -35,10 +48,6 @@ public class CarRentalCompany {
     
     public String getName() {
         return name;
-    }
-
-    private void setName(String name) {
-        this.name = name;
     }
 
     /*************

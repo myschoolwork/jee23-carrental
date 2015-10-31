@@ -1,7 +1,11 @@
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.List;
+import java.util.StringTokenizer;
 import javax.naming.InitialContext;
 import rental.CarType;
 import rental.Reservation;
@@ -16,8 +20,49 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
     }
 
     public static void main(String[] args) throws Exception {
+        
+        Main main = new Main("trips");
+        
         // TODO: use updated manager interface to load cars into companies
-        new Main("trips").run();
+        ManagerSessionRemote manager = main.getNewManagerSession("Ik", "Doet er niet toe.");
+        loadCompany("dockx", "dockx.csv", manager);
+        loadCompany("hertz", "hertz.csv", manager);
+        
+        main.run();
+    }
+    
+    static void loadCompany(String name, String datafile, ManagerSessionRemote manager)
+            throws NumberFormatException, IOException {
+        
+        // Create the company
+        manager.createCompany(name);
+
+        //open file from jar
+        BufferedReader in = new BufferedReader(new InputStreamReader(Main.class.getClassLoader().getResourceAsStream(datafile)));
+        //while next line exists
+        while (in.ready()) {
+            //read line
+            String line = in.readLine();
+            //if comment: skip
+            if (line.startsWith("#")) {
+                continue;
+            }
+            //tokenize on ,
+            StringTokenizer csvReader = new StringTokenizer(line, ",");
+            //create new car type from first 5 fields
+            String typeName = csvReader.nextToken();
+            int nbOfSeats = Integer.parseInt(csvReader.nextToken());
+            float trunkSpace = Float.parseFloat(csvReader.nextToken());
+            double rentalPricePerDay = Double.parseDouble(csvReader.nextToken());
+            boolean smokingAllowed = Boolean.parseBoolean(csvReader.nextToken());
+            
+            manager.createCarType(typeName, nbOfSeats, trunkSpace, rentalPricePerDay, smokingAllowed);
+            
+            //create N new cars with given type, where N is the 5th field
+            for (int i = Integer.parseInt(csvReader.nextToken()); i > 0; i--) {
+                manager.createCarFor(name, typeName);
+            }
+        }
     }
     
     @Override

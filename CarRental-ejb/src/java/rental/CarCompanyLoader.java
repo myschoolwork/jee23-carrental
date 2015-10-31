@@ -11,37 +11,16 @@ import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class RentalStore {
-
-    private static Map<String, CarRentalCompany> rentals;
-
-    public static CarRentalCompany getRental(String company) throws IllegalArgumentException {
-        CarRentalCompany out = RentalStore.getRentals().get(company);
-        if (out == null) {
-            throw new IllegalArgumentException("Company doesn't exist!: " + company);
-        }
-        return out;
-    }
-
-    public static synchronized Map<String, CarRentalCompany> getRentals() {
-        if (rentals == null) {
-            rentals = new HashMap<String, CarRentalCompany>();
-            loadRental("Hertz", "hertz.csv");
-            loadRental("Dockx", "dockx.csv");
-        }
-        return rentals;
-    }
+public class CarCompanyLoader {
 
     public static void loadRental(String name, String datafile) {
-        Logger.getLogger(RentalStore.class.getName()).log(Level.INFO, "loading {0} from file {1}", new Object[]{name, datafile});
         try {
             List<Car> cars = loadData(datafile);
             CarRentalCompany company = new CarRentalCompany(name, cars);
-            rentals.put(name, company);
         } catch (NumberFormatException ex) {
-            Logger.getLogger(RentalStore.class.getName()).log(Level.SEVERE, "bad file", ex);
+            Logger.getLogger(CarCompanyLoader.class.getName()).log(Level.SEVERE, "bad file", ex);
         } catch (IOException ex) {
-            Logger.getLogger(RentalStore.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CarCompanyLoader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -53,7 +32,7 @@ public class RentalStore {
         int nextuid = 0;
 
         //open file from jar
-        BufferedReader in = new BufferedReader(new InputStreamReader(RentalStore.class.getClassLoader().getResourceAsStream(datafile)));
+        BufferedReader in = new BufferedReader(new InputStreamReader(CarCompanyLoader.class.getClassLoader().getResourceAsStream(datafile)));
         //while next line exists
         while (in.ready()) {
             //read line

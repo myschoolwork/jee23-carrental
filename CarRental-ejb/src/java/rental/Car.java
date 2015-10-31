@@ -3,16 +3,25 @@ package rental;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
+@Entity
 public class Car {
 
+    @Id
     private int id;
+    @ManyToOne
     private CarType type;
+    @ManyToOne
     private Set<Reservation> reservations;
 
     /***************
      * CONSTRUCTOR *
      ***************/
+    
+    protected Car() { } //For entity
     
     public Car(int uid, CarType type) {
     	this.id = uid;

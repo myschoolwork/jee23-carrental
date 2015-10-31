@@ -3,10 +3,13 @@ package session;
 import java.util.Set;
 import javax.ejb.Remote;
 import rental.CarType;
-import rental.Reservation;
 
 @Remote
 public interface ManagerSessionRemote {
+    
+    public void createCompany(String name);
+    public void createCarType(String name, int nbOfSeats, float trunkSpace, double rentalPricePerDay, boolean smokingAllowed);
+    public void createCarFor(String comapny, String type);
     
     public Set<CarType> getCarTypes(String company);
     

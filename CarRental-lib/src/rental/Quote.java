@@ -2,10 +2,16 @@ package rental;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Inheritance;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+@Inheritance
 public class Quote implements Serializable {
 
+    @Temporal(TemporalType.DATE)
     private Date startDate;
+    @Temporal(TemporalType.DATE)
     private Date endDate;
     private String carRenter;
     private String rentalCompany;
