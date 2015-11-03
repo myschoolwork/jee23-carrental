@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
-import javax.persistence.TemporalType;
 import rental.CarCompanyLoader;
 import rental.CarRentalCompany;
 import rental.CarType;
@@ -17,11 +16,6 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
         CarRentalCompany company = CarCompanyLoader.loadRental(name, name.toLowerCase()+".csv");
         if (company != null) {
             em.persist(company);
-            // TO ASK: persist gives duplicate key error
-            // probably because boths companies use the same cartypes, but they are
-            // created separately. (So a cartype Compact is created for both hertz and dockx)
-            // merge just updates the previous instance of this cartype in the databse
-            // is this ok?
         }
     }
     

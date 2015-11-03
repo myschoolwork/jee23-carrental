@@ -19,9 +19,10 @@ public class Session {
     protected EntityManager em;
     
     protected CarRentalCompany getCompany(String companyName) {
-        return (CarRentalCompany) em.createQuery("SELECT c FROM CarRentalCompany c WHERE c.name LIKE :name")
+        return em.find(CarRentalCompany.class, companyName);
+        /*return (CarRentalCompany) em.createQuery("SELECT c FROM CarRentalCompany c WHERE c.name LIKE :name")
                 .setParameter("name", companyName)
-                .getResultList().get(0);
+                .getResultList().get(0);*/
     }
     
 }
