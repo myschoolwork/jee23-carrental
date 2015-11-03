@@ -36,6 +36,10 @@ public class CarRentalCompany {
     
     protected CarRentalCompany() { } //For entity
     
+    public CarRentalCompany(String name) {
+        this(name, new ArrayList<Car>());
+    }
+    
     public CarRentalCompany(String name, List<Car> cars) {
         logger.log(Level.INFO, "<{0}> Car Rental Company {0} starting up...", name);
         this.name = name;
@@ -87,7 +91,7 @@ public class CarRentalCompany {
      * CARS *
      *********/
     
-    private void addCar(Car car) {
+    public void addCar(Car car) {
         cars.add(car);
         carTypes.add(car.getType());
     }

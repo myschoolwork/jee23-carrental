@@ -1,7 +1,12 @@
 package client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.StringTokenizer;
 import javax.naming.InitialContext;
 import rental.CarType;
 import rental.Reservation;
@@ -21,8 +26,8 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         
         // TODO: use updated manager interface to load cars into companies
         ManagerSessionRemote manager = main.getNewManagerSession("Dit doet", " er niet toe.");
-        manager.loadData("Dockx");
-        manager.loadData("Hertz");
+        loadCompanyFromData("Dockx", "dockx.csv", manager);
+        loadCompanyFromData("Hertz", "hertz.csv", manager);
         
         System.out.println("Car types for Dockx: ");
         for(CarType ct : manager.getCarTypes("Dockx")) {
@@ -35,6 +40,35 @@ public class Main extends AbstractTestManagement<CarRentalSessionRemote, Manager
         }
         
         main.run();
+    }
+    
+    public static void loadCompanyFromData(String companyName, String datafile, ManagerSessionRemote ses)
+            throws NumberFormatException, IOException {
+
+        ses.createCompany(companyName);
+        
+        //open file from jar
+        BufferedReader in = new BufferedReader(new InputStreamReader(Main.class.getClassLoader().getResourceAsStream(datafile)));
+        //while next line exists
+        while (in.ready()) {
+            //read line
+            String line = in.readLine();
+            //if comment: skip
+            if (line.startsWith("#")) {
+                continue;
+            }
+            //tokenize on ,
+            StringTokenizer csvReader = new StringTokenizer(line, ",");
+            //create new car type from first 5 fields
+            CarType type = new CarType(csvReader.nextToken(),
+                    Integer.parseInt(csvReader.nextToken()),
+                    Float.parseFloat(csvReader.nextToken()),
+                    Double.parseDouble(csvReader.nextToken()),
+                    Boolean.parseBoolean(csvReader.nextToken()));
+            //create N new cars with given type, where N is the 5th field
+            int count = Integer.parseInt(csvReader.nextToken());
+            ses.createCarsFor(companyName, type, count);
+        }
     }
     
     @Override

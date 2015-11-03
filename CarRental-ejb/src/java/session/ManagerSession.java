@@ -4,20 +4,26 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import javax.ejb.Stateless;
-import rental.CarCompanyLoader;
+import rental.Car;
 import rental.CarRentalCompany;
 import rental.CarType;
 
 @Stateless
 public class ManagerSession extends Session implements ManagerSessionRemote {
-    
+
     @Override
-    public void loadData(String name) {
-        CarRentalCompany company = CarCompanyLoader.loadRental(name, name.toLowerCase()+".csv");
-        if (company != null) {
-            em.persist(company);
-        }
+    public void createCompany(String name) {
+        CarRentalCompany company = new CarRentalCompany(name);
+        em.persist(company);
     }
+
+    @Override
+    public void createCarsFor(String companyName, CarType type, int count) {
+        CarRentalCompany company = getCompany(companyName);
+        for (int i = 0; i < count; ++i) {
+            company.addCar(new Car(type));
+        }
+   }
     
     
     

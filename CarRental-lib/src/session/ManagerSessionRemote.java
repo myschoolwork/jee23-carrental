@@ -7,7 +7,8 @@ import rental.CarType;
 @Remote
 public interface ManagerSessionRemote {
     
-    public void loadData(String file);
+    public void createCompany(String name);
+    public void createCarsFor(String companyName, CarType type, int count);
     
     public Set<CarType> getCarTypes(String company);
     

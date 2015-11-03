@@ -29,9 +29,8 @@ public class Car {
     
     protected Car() { } //For entity
     
-    public Car(int uid, CarType type) {
-    	this.id = uid;
-        this.type = type;
+    public Car(CarType type) {
+    	this.type = type;
         this.reservations = new HashSet<Reservation>();
     }
 
