@@ -6,3 +6,7 @@ CarRental-lib/build/*
 /CarRental-lib/dist/
 /CarRental-ejb/dist/
 /CarRental-client/dist/
+/CarRental/nbproject/private/
+/CarRental-client/nbproject/private/
+/CarRental-ejb/nbproject/private/
+/CarRental-lib/nbproject/private/
