@@ -45,9 +45,9 @@ public class ManagerSession extends Session implements ManagerSessionRemote {
     }
 
     @Override
-    public int getNumberOfReservations(String company, String type, int id) {
+    public int getNumberOfReservations(int carId) {
         Object result = em.createQuery("SELECT COUNT(r) FROM Car c, IN(c.reservations) r WHERE c.id = :id")
-                .setParameter("id", id)
+                .setParameter("id", carId)
                 .getSingleResult();
         return ((Long)result).intValue();
     }

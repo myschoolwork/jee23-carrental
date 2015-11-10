@@ -3,3 +3,6 @@
 CarRental/build/*
 CarRental-ejb/build/*
 CarRental-lib/build/*
+/CarRental-lib/dist/
+/CarRental-ejb/dist/
+/CarRental-client/dist/
